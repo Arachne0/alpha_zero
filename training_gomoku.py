@@ -47,7 +47,7 @@ flags.DEFINE_integer(
 
 flags.DEFINE_integer(
     'batch_size',
-    256,
+    64,     # defalut : 256
     'To avoid overfitting, we want to make sure the agent only sees ~10% of samples in the replay over one checkpoint.'
     'That is, batch_size * ckpt_interval <= replay_capacity * 0.1',
 )
