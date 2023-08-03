@@ -191,22 +191,3 @@ python3 -m eval_agent_gomoku_cmd --nohuman_vs_ai
 * [Minigo: A minimalist Go engine modeled after AlphaGo Zero](https://github.com/tensorflow/minigo)
 
 
-
-# License
-
-This project is licensed under the MIT License, see the LICENSE file for details
-
-
-# Citing our work
-
-If you reference or use our project in your research, please cite:
-
-```
-@software{alpha_zero2022github,
-  title = {{Alpha Zero}: A PyTorch implementation of DeepMind's AlphaZero agent},
-  author = {Michael Hu},
-  url = {https://github.com/michaelnny/alpha_zero},
-  version = {2.0.0},
-  year = {2022},
-}
-```

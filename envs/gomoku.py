@@ -19,7 +19,7 @@ class GomokuEnv(BoardGameEnv):
 
     """
 
-    def __init__(self, board_size: int = [9,4], num_to_win: int = 4, num_stack: int = 8) -> None:
+    def __init__(self, board_size: Tuple[int, int] = [9, 4], num_to_win: int = 4, num_stack: int = 8) -> None:
         """
         Args:
             board_size: board size, 9 x 4
@@ -173,8 +173,8 @@ def is_bounded(board: np.ndarray, x: int, y: int) -> bool:
     if not isinstance(y, int):
         raise ValueError('Expect input arguments y to be integer.')
 
-    board_size = board.shape[0]
-    return (max(x, y) < board_size) and (min(x, y) >= 0)
+    board_size = [board.shape[0], board.shape[1]]
+    return 0 <= x < board.shape[0] and 0 <= y < board.shape[1] and (min(x, y) >= 0)
 
 
 def count_sequence_length_on_dir(

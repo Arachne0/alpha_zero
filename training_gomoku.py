@@ -24,7 +24,9 @@ import torch
 from torch.optim.lr_scheduler import MultiStepLR
 
 FLAGS = flags.FLAGS
-flags.DEFINE_integer('board_size', 13, 'Board size for freestyle Gomoku.')
+flags.DEFINE_integer('rows', 9, 'Number of rows for the task.')
+flags.DEFINE_integer('columns', 4, 'Number of columns for the task.')
+flags.DEFINE_list('board_size', [9, 4], 'Board size for the task.')
 flags.DEFINE_integer('num_stack', 8, 'Stack N previous states, the state is an image of N x 2 + 1 binary planes.')
 flags.DEFINE_integer('num_res_blocks', 10, 'Number of residual blocks in the neural network.')
 flags.DEFINE_integer('num_filters', 40, 'Number of filters for the conv2d layers in the neural network.')
@@ -99,10 +101,10 @@ flags.DEFINE_float(
 )
 flags.DEFINE_integer('ckpt_interval', 1000, 'The frequency (in training step) to create new checkpoint.')
 flags.DEFINE_integer('log_interval', 200, 'The frequency (in training step) to log training statistics.')
-flags.DEFINE_string('ckpt_dir', './checkpoints/gomoku/13x13', 'Path for checkpoint file.')
-flags.DEFINE_string('logs_dir', './logs/gomoku/13x13', 'Path to save statistics for self-play, training, and evaluation.')
+flags.DEFINE_string('ckpt_dir', './checkpoints/gomoku/9x4', 'Path for checkpoint file.')
+flags.DEFINE_string('logs_dir', './logs/gomoku/9x4', 'Path to save statistics for self-play, training, and evaluation.')
 flags.DEFINE_string('eval_games_dir', '', 'Path contains evaluation games in sgf format.')
-flags.DEFINE_string('save_sgf_dir', './selfplay_games/gomoku/13x13', 'Path to save selfplay games in sgf format.')
+flags.DEFINE_string('save_sgf_dir', './selfplay_games/gomoku/9x4', 'Path to save selfplay games in sgf format.')
 flags.DEFINE_integer('save_sgf_interval', 500, 'How often to save self-play games.')
 
 flags.DEFINE_integer(
@@ -170,7 +172,7 @@ def main():
         actor_devices = [torch.device(f'cuda:{i % num_gpus}') for i in range(FLAGS.num_actors)]
 
     def env_builder():
-        return GomokuEnv(board_size=FLAGS.board_size, num_stack=FLAGS.num_stack)
+        return GomokuEnv(board_size=[9, 4], num_stack=FLAGS.num_stack)
 
     eval_env = env_builder()
 

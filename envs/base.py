@@ -23,7 +23,7 @@ class BoardGameEnv(gym.Env):
 
     def __init__(
         self,
-        board_size: int = 15,
+        board_size: Tuple[int, int] = (9, 4),
         num_stack: int = 8,
         black_player_id: int = 1,
         white_player_id: int = 2,
@@ -44,20 +44,20 @@ class BoardGameEnv(gym.Env):
 
         self.id = id
         self.board_size = board_size
-        self.board = np.zeros((self.board_size, self.board_size), dtype=np.int8)
+        self.board = np.zeros(tuple(board_size), dtype=np.int8)
         self.num_stack = num_stack
 
         self.black_player = black_player_id  # black player id as well as stone color on the board
         self.white_player = white_player_id  # white player id as well as stone color on the board
 
         self.observation_space = Box(
-            low=0, high=1, shape=(self.num_stack * 2 + 1, self.board_size, self.board_size), dtype=np.int8
+            low=0, high=1, shape=(self.num_stack * 2 + 1, *self.board_size), dtype=np.int8
         )
 
         self.has_pass_move = has_pass_move
         self.has_resign_move = has_resign_move
 
-        self.action_dim = self.board_size**2 + 1 if self.has_pass_move else self.board_size**2
+        self.action_dim = self.board_size[0] * self.board_size[1] + 1 if self.has_pass_move else self.board_size[0] * self.board_size[1]
         self.action_space = Discrete(self.action_dim)
 
         self.pass_move = self.action_space.n - 1 if self.has_pass_move else None
@@ -79,7 +79,7 @@ class BoardGameEnv(gym.Env):
         self.history: Iterable[PlayerMove] = []
 
         self.gtp_columns = 'ABCDEFGHJKLMNOPQRSTUVWXYZ'
-        self.gtp_rows = [str(i) for i in range(self.board_size, -1, -1)]
+        self.gtp_rows = [str(i) for i in range(self.board_size[0]-1, -1, -1)]
 
         self.cc = CoordsConvertor(self.board_size)
 
@@ -232,7 +232,7 @@ class BoardGameEnv(gym.Env):
             where N = 2 x num_stack + 1
         """
         # Create an empty array to hold the stacked planes, with shape (16, 19, 19)
-        features = np.zeros((self.num_stack * 2, self.board_size, self.board_size), dtype=np.int8)
+        features = np.zeros((self.num_stack * 2, self.board_size[0], self.board_size[1]), dtype=np.int8)
 
         deltas = np.array(self.board_deltas)
 
@@ -241,7 +241,7 @@ class BoardGameEnv(gym.Env):
         features[1::2] = deltas == self.opponent_player
 
         # Color to play is a plane with all zeros for white, ones for black.
-        color_to_play = np.zeros((1, self.board_size, self.board_size), dtype=np.int8)
+        color_to_play = np.zeros((1, self.board_size[0], self.board_size[1]), dtype=np.int8)
         if self.to_play == self.black_player:
             color_to_play += 1
 
@@ -252,7 +252,8 @@ class BoardGameEnv(gym.Env):
 
     def get_empty_queue(self) -> deque:
         """Returns empty queue with stack_N * all zeros planes."""
-        return deque([np.zeros((self.board_size, self.board_size))] * self.num_stack, maxlen=self.num_stack)
+        return deque([np.zeros((self.board_size[0], self.board_size[1]), dtype=np.int8) for _ in range(self.num_stack)], maxlen=self.num_stack)
+
 
     def is_board_full(self) -> bool:
         return np.all(self.board != 0)
@@ -285,13 +286,19 @@ class BoardGameEnv(gym.Env):
         x, y = coords
         return (max(x, y) < self.board_size) and (min(x, y) >= 0)
 
+    """
     def action_to_coords(self, action: int) -> Tuple[int, int]:
-        """Convert action index into coords in the format of (row_index, column_index)"""
         # Return dummy coords
         if action is None:
             return (-1, -1)
 
         return self.cc.from_flat(action)
+    """
+
+    def action_to_coords(self, action: int) -> Tuple[int, int]:
+        row_index = action % self.board_size[0]
+        col_index = action // self.board_size[0]
+        return row_index, col_index
 
     def action_to_gtp(self, action: int) -> Tuple[int, int]:
         """Convert action index into coords in the GTP format e.g D4"""
