@@ -1,15 +1,11 @@
-# Mac/OSX
-.DS_Store
-
+9x9_matches/
+checkpoints/
+.vscode/
 __pycache__/
-*.py[cod]
-*$py.class
-.Python
-
-.vscode
-
-nohup.out
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
+images/
+.idea/
+logs/
+*.log
+*.out
+*.sh
+.pre-commit-config.yaml

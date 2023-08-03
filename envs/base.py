@@ -1,5 +1,4 @@
-# Copyright (c) 2023 Michael Hu
-# All rights reserved.
+
 from typing import Iterable, Tuple, Mapping, Text
 from collections import deque, namedtuple
 import os
