@@ -23,7 +23,7 @@ from copy import copy, deepcopy
 
 # from mcts_v1 import Node, parallel_uct_search, uct_search
 
-from mcts_v2 import Node, parallel_uct_search, uct_search
+from mcts import Node, parallel_uct_search, uct_search
 
 from envs.base import BoardGameEnv
 from eval_dataset import build_eval_dataset

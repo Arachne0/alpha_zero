@@ -1,5 +1,6 @@
 9x9_matches/
 checkpoints/
+selfplay_games/
 .vscode/
 __pycache__/
 images/

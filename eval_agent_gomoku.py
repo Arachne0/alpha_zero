@@ -7,18 +7,11 @@ import sys
 import torch
 
 FLAGS = flags.FLAGS
-flags.DEFINE_integer('board_size', 13, 'Board size for freestyle Gomoku.')
+flags.DEFINE_integer('board_size', [9, 4], 'Board size for freestyle Gomoku.')
 flags.DEFINE_integer('num_stack', 8, 'Stack N previous states, the state is an image of N x 2 + 1 binary planes.')
 flags.DEFINE_integer('num_res_blocks', 10, 'Number of residual blocks in the neural network.')
 flags.DEFINE_integer('num_filters', 40, 'Number of filters for the conv2d layers in the neural network.')
 flags.DEFINE_integer('num_fc_units', 80, 'Number of hidden units in the linear layer of the neural network.')
-
-flags.DEFINE_string(
-    'black_ckpt', './checkpoints/gomoku/13x13/training_steps_170000.ckpt', 'Load the checkpoint file for black player.'
-)
-flags.DEFINE_string(
-    'white_ckpt', './checkpoints/gomoku/13x13/training_steps_200000.ckpt', 'Load the checkpoint file for white player.'
-)
 
 flags.DEFINE_integer('num_simulations', 400, 'Number of iterations per MCTS search.')
 flags.DEFINE_integer(

@@ -19,10 +19,10 @@ class GomokuEnv(BoardGameEnv):
 
     """
 
-    def __init__(self, board_size: int = 15, num_to_win: int = 5, num_stack: int = 8) -> None:
+    def __init__(self, board_size: int = [9,4], num_to_win: int = 4, num_stack: int = 8) -> None:
         """
         Args:
-            board_size: board size, default 15.
+            board_size: board size, 9 x 4
             num_to_win: number of connected stones to win, default 5.
             num_stack: stack last N history states, default 8.
         """
